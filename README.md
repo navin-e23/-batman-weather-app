@@ -152,14 +152,8 @@ https://YOUR-USERNAME.github.io/batman-weather-app/
 
 ---
 
-## 📜 License
-
-MIT License — use freely, fork boldly, deploy anywhere.
-
----
-
 ## 👤 Author
-
+NAVIN E
 Built as **Project 4** of the Web Development curriculum.  
 Gotham-themed by the Caped Coder. 🦇
 
