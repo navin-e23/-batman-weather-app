@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GothamWeather — Dark Knight Forecast</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- Bat Signal Overlay -->
+  <div class="bat-signal" id="batSignal">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="120" rx="80" ry="50" fill="#f5c518" opacity="0.15"/>
+      <path d="M100 60 C60 60 20 90 10 130 C30 110 50 105 70 115 C60 95 75 80 100 80 C125 80 140 95 130 115 C150 105 170 110 190 130 C180 90 140 60 100 60Z" fill="#f5c518" opacity="0.3"/>
+    </svg>
+  </div>
+
+  <!-- Rain canvas -->
+  <canvas id="rainCanvas"></canvas>
+
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="bat-logo">
+        <svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg" class="bat-icon">
+          <path d="M60 10 C30 10 5 30 0 55 C15 40 28 38 38 45 C30 28 44 18 60 18 C76 18 90 28 82 45 C92 38 105 40 120 55 C115 30 90 10 60 10Z" fill="#f5c518"/>
+          <ellipse cx="60" cy="52" rx="18" ry="8" fill="#f5c518"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1 class="title">GOTHAM WEATHER</h1>
+        <p class="subtitle">Dark Knight Atmospheric Intelligence</p>
+      </div>
+    </header>
+
+    <!-- Search -->
+    <div class="search-section">
+      <div class="search-box">
+        <input
+          type="text"
+          id="cityInput"
+          placeholder="Search a city, Commissioner..."
+          autocomplete="off"
+        />
+        <button id="searchBtn" onclick="fetchWeather()">
+          <span class="btn-icon">🦇</span>
+          <span>SCAN</span>
+        </button>
+      </div>
+      <button class="location-btn" onclick="getLocation()">
+        ◎ Use My Location
+      </button>
+    </div>
+
+    <!-- Error -->
+    <div class="error-box" id="errorBox">
+      <span class="error-icon">⚠</span>
+      <span id="errorMsg">City not found in the Batcomputer database.</span>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+      <div class="bat-spinner">🦇</div>
+      <p>Accessing Batcomputer...</p>
+    </div>
+
+    <!-- Weather Card -->
+    <div class="weather-card" id="weatherCard">
+
+      <div class="card-top">
+        <div class="location-info">
+          <h2 class="city-name" id="cityName">—</h2>
+          <p class="country" id="countryName">—</p>
+          <p class="date-time" id="dateTime">—</p>
+        </div>
+        <div class="weather-icon-wrap">
+          <div class="weather-emoji" id="weatherEmoji">☁️</div>
+          <p class="weather-desc" id="weatherDesc">—</p>
+        </div>
+      </div>
+
+      <div class="temp-display">
+        <span class="temp-main" id="tempMain">--</span>
+        <span class="temp-unit">°C</span>
+        <span class="temp-feel">Feels like <span id="feelsLike">--</span>°C</span>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">💧</div>
+          <div class="stat-label">Humidity</div>
+          <div class="stat-value" id="humidity">--%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌬</div>
+          <div class="stat-label">Wind</div>
+          <div class="stat-value" id="wind">-- km/h</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👁</div>
+          <div class="stat-label">Visibility</div>
+          <div class="stat-value" id="visibility">-- km</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌡</div>
+          <div class="stat-label">Pressure</div>
+          <div class="stat-value" id="pressure">-- hPa</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌅</div>
+          <div class="stat-label">Sunrise</div>
+          <div class="stat-value" id="sunrise">--:--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌇</div>
+          <div class="stat-label">Sunset</div>
+          <div class="stat-value" id="sunset">--:--</div>
+        </div>
+      </div>
+
+      <!-- Batman Quote -->
+      <div class="batman-quote" id="batmanQuote">
+        <span class="quote-mark">"</span>
+        <span id="quoteText">The night is darkest just before the dawn.</span>
+        <span class="quote-mark">"</span>
+        <div class="quote-author">— Batman</div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Powered by OpenWeatherMap · Built for Gotham · <span class="yellow">© Batman Inc.</span></p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

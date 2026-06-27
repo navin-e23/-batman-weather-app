@@ -1,0 +1,401 @@
+/* ===========================
+   GOTHAM WEATHER — DARK THEME
+   =========================== */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gotham-black:  #0a0a0f;
+  --gotham-dark:   #111118;
+  --gotham-panel:  #16161f;
+  --gotham-border: #2a2a3a;
+  --bat-yellow:    #f5c518;
+  --bat-gold:      #d4a017;
+  --fog-gray:      #8888aa;
+  --white:         #e8e8f0;
+  --danger-red:    #c0392b;
+  --font-display:  'Bebas Neue', sans-serif;
+  --font-body:     'Rajdhani', sans-serif;
+  --font-mono:     'Share Tech Mono', monospace;
+}
+
+/* ---------- GLOBAL ---------- */
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--gotham-black);
+  color: var(--white);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ---------- BAT SIGNAL OVERLAY ---------- */
+.bat-signal {
+  position: fixed;
+  top: -60px;
+  right: -60px;
+  width: 400px;
+  height: 400px;
+  pointer-events: none;
+  z-index: 0;
+  animation: signalPulse 6s ease-in-out infinite;
+}
+.bat-signal svg { width: 100%; height: 100%; }
+
+@keyframes signalPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
+  50%       { opacity: 0.8; transform: scale(1.05) rotate(3deg); }
+}
+
+/* ---------- RAIN CANVAS ---------- */
+#rainCanvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.18;
+}
+
+/* ---------- CONTAINER ---------- */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+}
+
+/* ---------- HEADER ---------- */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 36px;
+}
+
+.bat-logo { flex-shrink: 0; }
+.bat-icon {
+  width: 72px;
+  height: 36px;
+  filter: drop-shadow(0 0 10px #f5c51888);
+  animation: batGlow 3s ease-in-out infinite;
+}
+
+@keyframes batGlow {
+  0%, 100% { filter: drop-shadow(0 0 8px #f5c51866); }
+  50%       { filter: drop-shadow(0 0 20px #f5c518bb); }
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  letter-spacing: 4px;
+  color: var(--bat-yellow);
+  line-height: 1;
+  text-shadow: 0 0 30px #f5c51844;
+}
+
+.subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--fog-gray);
+  letter-spacing: 2px;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* ---------- SEARCH ---------- */
+.search-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-box {
+  display: flex;
+  gap: 0;
+  border: 1.5px solid var(--bat-yellow);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 20px #f5c51822;
+  transition: box-shadow 0.3s;
+}
+.search-box:focus-within {
+  box-shadow: 0 0 32px #f5c51844;
+}
+
+#cityInput {
+  flex: 1;
+  background: var(--gotham-panel);
+  border: none;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 14px 18px;
+  outline: none;
+  letter-spacing: 1px;
+}
+#cityInput::placeholder { color: var(--fog-gray); font-weight: 400; }
+
+#searchBtn {
+  background: var(--bat-yellow);
+  border: none;
+  color: var(--gotham-black);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  padding: 0 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+#searchBtn:hover { background: var(--bat-gold); }
+#searchBtn:active { transform: scale(0.97); }
+.btn-icon { font-size: 1rem; }
+
+.location-btn {
+  background: transparent;
+  border: 1px solid var(--gotham-border);
+  color: var(--fog-gray);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 9px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  transition: border-color 0.2s, color 0.2s;
+  align-self: flex-start;
+}
+.location-btn:hover { border-color: var(--bat-yellow); color: var(--bat-yellow); }
+
+/* ---------- ERROR ---------- */
+.error-box {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  background: #1e0a0a;
+  border: 1px solid var(--danger-red);
+  border-radius: 4px;
+  padding: 12px 18px;
+  margin-bottom: 16px;
+  color: #e07070;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.error-box.show { display: flex; }
+.error-icon { color: var(--danger-red); font-size: 1.1rem; }
+
+/* ---------- LOADER ---------- */
+.loader {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 48px 0;
+  color: var(--fog-gray);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+}
+.loader.show { display: flex; }
+
+.bat-spinner {
+  font-size: 2.4rem;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- WEATHER CARD ---------- */
+.weather-card {
+  display: none;
+  background: var(--gotham-panel);
+  border: 1px solid var(--gotham-border);
+  border-radius: 6px;
+  padding: 32px;
+  box-shadow: 0 8px 60px #00000088, inset 0 1px 0 #ffffff08;
+  animation: cardReveal 0.5s ease;
+}
+.weather-card.show { display: block; }
+
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Card top row */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.city-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  letter-spacing: 3px;
+  color: var(--bat-yellow);
+  line-height: 1;
+}
+
+.country {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--fog-gray);
+  letter-spacing: 2px;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.date-time {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--fog-gray);
+  margin-top: 8px;
+}
+
+.weather-icon-wrap { text-align: center; }
+.weather-emoji { font-size: 3.8rem; line-height: 1; }
+.weather-desc {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--fog-gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 6px;
+}
+
+/* Temperature */
+.temp-display {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  padding: 20px 0;
+  border-top: 1px solid var(--gotham-border);
+  border-bottom: 1px solid var(--gotham-border);
+  margin-bottom: 24px;
+}
+
+.temp-main {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 14vw, 7rem);
+  line-height: 0.9;
+  color: var(--white);
+  letter-spacing: -2px;
+}
+
+.temp-unit {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--bat-yellow);
+  padding-bottom: 10px;
+}
+
+.temp-feel {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--fog-gray);
+  padding-bottom: 12px;
+  margin-left: auto;
+  letter-spacing: 1px;
+}
+.temp-feel span { color: var(--white); }
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--gotham-dark);
+  border: 1px solid var(--gotham-border);
+  border-radius: 4px;
+  padding: 16px 12px;
+  text-align: center;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.stat-card:hover {
+  border-color: var(--bat-yellow);
+  transform: translateY(-2px);
+}
+
+.stat-icon { font-size: 1.3rem; margin-bottom: 6px; }
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--fog-gray);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.stat-value {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--white);
+  letter-spacing: 0.5px;
+}
+
+/* Batman Quote */
+.batman-quote {
+  background: var(--gotham-dark);
+  border-left: 3px solid var(--bat-yellow);
+  padding: 16px 20px;
+  border-radius: 0 4px 4px 0;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--fog-gray);
+  font-style: italic;
+  line-height: 1.6;
+}
+.quote-mark {
+  color: var(--bat-yellow);
+  font-size: 1.4rem;
+  font-style: normal;
+  line-height: 0;
+  vertical-align: -0.3em;
+}
+.quote-author {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--bat-yellow);
+  letter-spacing: 2px;
+  margin-top: 8px;
+  font-style: normal;
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+  margin-top: 32px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--gotham-border);
+  letter-spacing: 1px;
+}
+.yellow { color: var(--bat-yellow); }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .card-top { flex-direction: column; }
+  .weather-card { padding: 20px; }
+  .header { flex-direction: column; text-align: center; }
+}
+
+/* ---------- SCROLLBAR ---------- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--gotham-black); }
+::-webkit-scrollbar-thumb { background: var(--gotham-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--bat-yellow); }
