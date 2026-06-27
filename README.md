@@ -8,7 +8,7 @@ A Batman-themed weather application built with **HTML, CSS & JavaScript** that d
 
 ## 🌐 Live Demo
 
-👉 **[View Live Site](https://YOUR-USERNAME.github.io/batman-weather-app/)**
+👉 **[View Live Site]( https://navin-e23.github.io/-batman-weather-app/)**
 *(Replace YOUR-USERNAME with your GitHub username after deploying)*
 
 ---
